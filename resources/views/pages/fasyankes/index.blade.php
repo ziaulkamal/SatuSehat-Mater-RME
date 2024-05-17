@@ -203,7 +203,12 @@
                         '<span class="copy-button" onclick="copyToClipboard(\'' + item.client_id +
                         '\')"><i class="icon-copy"></i></span>' +
                         '</div>' +
-                        '<div class="body-text"><center>' + item.organisasi_id + '</center></div>' +
+
+                        '<div class="body-text">' +
+                        '<span class="short-text">' + item.organisasi_id + '</span>' +
+                        '<span class="copy-button" onclick="copyToClipboard(\'' + item.organisasi_id +
+                        '\')"><i class="icon-copy"></i></span>' +
+                        '</div>' +
                         '<div class="body-text">' +
                         '<span class="short-text">' + item.const_users + '</span>' +
                         '<span class="copy-button" onclick="copyToClipboard(\'' + item.const_users +

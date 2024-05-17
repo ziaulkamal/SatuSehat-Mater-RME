@@ -1,6 +1,7 @@
 @php
 $currentUrl = request()->url();
 @endphp
+
 <div class="center">
 <div class="center-item">
     <div class="center-heading">Main Menu</div>
@@ -24,5 +25,11 @@ $currentUrl = request()->url();
             </a>
         </li>
     </ul>
+                    <div class="bot text-center" id="area-log-bottom">
+                        <div class="wrap">
+
+                            <span id="logout-mobile" class="tf-button w-full">Log Out</span>
+                        </div>
+                    </div>
 </div>
 </div>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\UserClientCredential;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,8 +15,13 @@ class TransactionPayment extends Model
         'transaction_id',
         'const_users',
         'total_bayar',
-        'status'
+        'status',
+        'created_at'
     ];
+
+    protected $cast = ['created_at'];
+
+    protected $dates = ['created_at'];
 
     public static function sumTotalBayar()
     {
@@ -46,5 +52,28 @@ class TransactionPayment extends Model
 
         $data->load('client');
         return $data;
+    }
+
+    public static function detail($const_users) {
+        $data = self::where('const_users', $const_users)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+        $data->load('client');
+
+        return $data;
+    }
+
+    // Mutator to set the 'created_at' attribute in the desired format
+    public function getCreatedAtAttribute($value)
+    {
+        // Convert the incoming date string to Carbon instance
+        $carbonDate = Carbon::parse($value);
+
+        // Format the Carbon instance as required (dd-mm-yyyy)
+        $formattedDate = $carbonDate->format('d M Y');
+
+        // Return the formatted date
+        return $formattedDate;
     }
 }

@@ -26,20 +26,21 @@
                             <span class="image">
                                 <img src="{{ asset('build/images/avatar/user-1.png') }}" alt="">
                             </span>
+
                             <span class="flex flex-column">
-                                <span class="body-title mb-2">Kristin Watson</span>
+                                <span class="body-title mb-2">Hello !</span>
                                 <span class="text-tiny">Admin</span>
                             </span>
                         </span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton3" >
                         <li>
-                            <a href="login.html" class="user-item">
+                            <div id="logout" class="user-item">
                                 <div class="icon">
                                     <i class="icon-log-out"></i>
                                 </div>
                                 <div class="body-title-2">Log out</div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </div>

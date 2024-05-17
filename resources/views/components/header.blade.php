@@ -8,7 +8,7 @@
     <!-- Basic Page Needs -->
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
-    <title>{{ $title ?? env('APP_NAME') }}</title>
+    <title>{{ $title != null ? $title .' - '. env('APP_NAME') : env('APP_NAME') }}</title>
 
     <meta name="author" content="themesflat.com">
 

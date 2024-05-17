@@ -341,6 +341,8 @@
                         '<div class="list-icon-function">' +
                         '<div class="item eye" data-const-users="' + item
                             .const_users + '"><i class="icon-airplay"></i></div>' +
+                        '<div class="item edit" data-const-users="' + item
+                            .const_users + '"><i class="icon-layers"></i></div>' +
                         '</div>' +
                         '</li>';
                     list.append(row);
@@ -381,7 +383,14 @@
                     if (konfirmasi) {
                         bayar(constUsers);
                     }
+                });
 
+                // Add click event for verify buttons
+                $('.item.edit').on('click', function () {
+                    var constUsers = $(this).data('const-users');
+                    let routesHistoy = `{{ route('payment.history', ['const_users' => ':id']) }}`;
+                    routesHistoy = routesHistoy.replace(':id', constUsers);
+                    window.location.href = routesHistoy;
                 });
 
 

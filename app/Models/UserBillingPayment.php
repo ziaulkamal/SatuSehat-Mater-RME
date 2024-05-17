@@ -86,5 +86,28 @@ class UserBillingPayment extends Model
     }
 
 
+    public static function detail($const_users) {
+        $data =  self::where('const_users', $const_users)->first();
+        $data->load('client');
+
+        return $data;
+    }
+
+    public static function actionStatus($const_users, $status) {
+        switch ($status) {
+            case 'active':
+                $code = 'active';
+                break;
+
+            case 'suspend':
+                $code = 'suspend';
+                break;
+        }
+        $update = self::where('const_users', $const_users)->first();
+        $update->status = $code;
+
+        return $update->save();
+
+    }
 
 }

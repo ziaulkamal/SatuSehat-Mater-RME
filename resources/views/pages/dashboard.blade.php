@@ -1,5 +1,5 @@
 @extends('layout')
-
+{{-- @dd(session('user_email')) --}}
 @section('page')
 <div class="main-content-inner">
     <div class="main-content-wrap">

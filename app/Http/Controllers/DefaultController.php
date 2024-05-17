@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class DefaultController extends ComponentController
 {
+
     function index() {
         $data = [
             'title'     => 'Dashboard',
@@ -46,7 +47,21 @@ class DefaultController extends ComponentController
         return $this->layout($data);
     }
 
+    function payment() {
+        $data = [
+            'title'     => 'Detail History Pembayaran',
+            'page'      => 'pages.billing.detail',
+            'data'      => []
+        ];
+
+        return $this->layout($data);
+    }
+
     function layout($data) {
         return view($data['page'])->with($data);
+    }
+
+    function test() : Returntype {
+        dd(session()->all());
     }
 }

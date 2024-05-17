@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdministratorUser;
 use App\Services\OAuth2Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 
 class BaseController extends Controller
 {
+
     protected $oauth2Client;
 
     public function __construct(OAuth2Client $oauth2Client)
@@ -46,7 +50,5 @@ class BaseController extends Controller
         }
     }
 
-    function test($data) {
-        return response()->json($data);
-    }
+
 }

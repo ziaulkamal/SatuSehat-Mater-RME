@@ -3,16 +3,29 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdministratorUser;
 use App\Models\TransactionPayment;
 use App\Models\UserBillingPayment;
 use App\Models\UserClientCredential;
+use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class DefaultController extends BaseController
 {
+
+    protected $telegramService;
+
+    public function __construct(TelegramService $telegramService)
+    {
+        $this->telegramService = $telegramService;
+    }
+
 
     public function gatewayApiRequest(Request $request)
     {
@@ -259,4 +272,181 @@ class DefaultController extends BaseController
         }
 
     }
+
+    public function d_payment($const_users) {
+        $list       = TransactionPayment::detail($const_users);
+        $profile    = UserBillingPayment::detail($const_users);
+        try {
+            $fasyankes = $list[0]['client']->nama_fasyankes;
+            return response()->json([
+                'fasyankes' => $fasyankes,
+                'profile'   => $profile,
+                'data'      => $list
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data failed to get',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function u_status($const_users, $status) {
+        $condition = UserBillingPayment::actionStatus($const_users, $status);
+        $message = $status != 'active' ? 'Di Tangguhkan' : 'Di Aktivasi';
+        try {
+            return response()->json([
+                'success' => true,
+                'message' => 'License Telah '. $message,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Const ID tidak ditemukan !',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function create_admin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:administrator_user,email',
+            'password' => 'required|min:6',
+            'secret_key' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $secret_key = 'codepad@usa.com';
+        if ($request->input('secret_key') !== $secret_key) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid secret key',
+            ], 403);
+        }
+
+        try {
+            $data = [
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+            ];
+
+            $result = AdministratorUser::createAccount($data);
+
+            return response()->json([
+                'success' => true,
+                'data' => $result,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function v_login(Request $request) {
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+        try {
+            $ip_address = file_get_contents("http://ipecho.net/plain");
+            $user_agent = $request->header('User-Agent');
+            $token = AdministratorUser::tryLogin($request->email, $request->password, $ip_address);
+            $data = AdministratorUser::validateOne($request->email);
+            if ($token) {
+                if ($data->condition == true) {
+                    $data->token = null;
+                    $data->save();
+
+                    return response()->json([
+                        'success'   => false,
+                        'message'   => 'Akun Anda sedang di akses di perangkat lain'
+                    ], 201);
+
+                }
+                $data->condition = true;
+                $data->save();
+                session([
+                    'user_id'    => $data->id,
+                    'user_email' => $data->email,
+                    'condition'  => $data->condition,
+                    'time'       => Carbon::now()
+                ]);
+                // return response()->json([
+                //     'success'   => true,
+                //     'message'   => 'Silahkan masukan token untuk login',
+                // ], 200);
+                return response()->json([
+                    'success'   => true,
+                    'message'   => 'Akses di kenali, Selamat Datang Admin',
+                    'redirect'  => route('dashboard')
+                ], 200);
+            }else {
+               return response()->json([
+                    'success'   => false,
+                    'message'   => 'Access Denied'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'   => false,
+                'message'   => 'Access Denied'
+            ], 500);
+        }
+    }
+
+    public function v_token(Request $request) {
+        $users = AdministratorUser::tokenizer($request->userInput);
+        if ($users) {
+
+
+            session([
+                'user_id'    => $users->id,
+                'user_email' => $users->email,
+                'condition'  => $users->condition,
+                'time'       => Carbon::now()
+            ]);
+
+            // $message = "[LOGIN]\n\n$users";
+            // $this->telegramService->sendMessage($message);
+            return response()->json([
+                'success' => true,
+                'message' => 'Authentication successful',
+                'redirect' => route('dashboard'),
+            ]);
+        }
+    }
+
+    public function v_destroy() {
+        $id = session('user_id');
+        $data = AdministratorUser::destroy($id);
+        // $message = "[END]\n\n$data";
+        // $this->telegramService->sendMessage($message);
+        session()->flush();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Anda telah logout',
+            'redirect' => route('login_page')
+        ]);
+    }
+
+
 }

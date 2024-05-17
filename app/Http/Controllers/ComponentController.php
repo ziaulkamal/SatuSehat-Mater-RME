@@ -33,4 +33,5 @@ class ComponentController extends Controller
     public function dataUserTransaction() {
         return TransactionPayment::lastUpdates();
     }
+
 }
