@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Models\BlacklistIp;
-use App\Services\TelegramService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -13,12 +12,8 @@ class DetectBruteForce
 {
     protected $maxAttempts = 30;
     protected $decayMinutes = 30;
-    protected $telegramService;
 
-    public function __construct(TelegramService $telegramService)
-    {
-        $this->telegramService = $telegramService;
-    }
+
 
     public function handle(Request $request, Closure $next)
     {
@@ -46,8 +41,6 @@ class DetectBruteForce
             $method = $request->method();
             $path = $request->path();
 
-            $message = "[WARNING] Serangan Brute Force dari IP: $ip \n\n\nMethod: $method\nPath: $path\n\n\nSukses masuk ke Blacklist";
-            $this->telegramService->sendMessage($message);
             // Jika mencapai batas, tambahkan IP ke dalam database dan blacklist
             BlacklistIp::create(['ip' => $ip, 'ua' => $request->header('User-Agent')]);
             Cache::put('blacklist_' . $ip, true, now()->addMinutes($this->decayMinutes));

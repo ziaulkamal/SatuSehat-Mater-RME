@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\AdministratorUser;
-use App\Services\TelegramService;
+
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Support\Facades\Auth;
@@ -11,12 +11,7 @@ use Illuminate\Support\Facades\Session;
 
 class CheckLoginTime
 {
-    protected $telegramService;
 
-    public function __construct(TelegramService $telegramService)
-    {
-        $this->telegramService = $telegramService;
-    }
 
     public function handle($request, Closure $next)
     {

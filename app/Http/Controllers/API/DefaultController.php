@@ -7,7 +7,6 @@ use App\Models\AdministratorUser;
 use App\Models\TransactionPayment;
 use App\Models\UserBillingPayment;
 use App\Models\UserClientCredential;
-use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +18,6 @@ use Illuminate\Support\Str;
 class DefaultController extends BaseController
 {
 
-    protected $telegramService;
-
-    public function __construct(TelegramService $telegramService)
-    {
-        $this->telegramService = $telegramService;
-    }
 
 
     public function gatewayApiRequest(Request $request)

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Services\TelegramService;
+
 use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -15,12 +15,6 @@ use Illuminate\Support\Facades\Session;
 
 class AdministratorUser extends Model implements Authenticatable
 {
-    protected $telegramService;
-
-    public function __construct(TelegramService $telegramService)
-    {
-        $this->telegramService = $telegramService;
-    }
 
     use AuthenticableTrait;
     protected $table = 'administrator_user';
