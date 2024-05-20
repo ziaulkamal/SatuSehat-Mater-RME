@@ -107,7 +107,7 @@ class DefaultController extends BaseController
         $data       = UserClientCredential::data($const_users);
         $id         = $data->organisasi_id;
         $resources  = 'Organization';
-        [ $response, $statusCode ] = $this->call($id, $resources, $token);
+        [ $response, $statusCode ] = $this->getFHIR($id, $resources, $token);
         try {
             $data->nama_fasyankes = $response->name;
             $data->validasi = true;

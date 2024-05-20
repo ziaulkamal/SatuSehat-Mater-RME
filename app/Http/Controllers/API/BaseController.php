@@ -27,7 +27,7 @@ class BaseController extends Controller
         return $response;
     }
 
-    public function call($id, $resources, $token) {
+    public function getFHIR($id, $resources, $token) {
         $client = new Client();
         $headers = [
             'Authorization' => 'Bearer ' . $token,
