@@ -32,8 +32,8 @@ class DefaultController extends BaseController
             $client = UserClientCredential::where('organisasi_id', $organisasi_id)->count();
             $validate = UserClientCredential::getStatusClient($const_users);
 
-            if ( $client === 1) {
-                if ($validate === true) {
+            if ( $client == 1) {
+                if ($validate == true) {
                     return $this->token($const_users);
                 }else {
                     return response()->json([
