@@ -12,35 +12,20 @@ use Illuminate\Support\Facades\Session;
 class CheckLoginTime
 {
 
-
     public function handle($request, Closure $next)
     {
-        // Memeriksa apakah waktu login tersimpan di sesi
-        if (session()->has('login_time')) {
-            $loginTime = session('login_time');
-            $id = session('user_id');
+        // Periksa apakah user sudah login
+        if (Auth::check()) {
+            $lastLoginTime = session('time');
             $currentTime = Carbon::now();
 
-            // Memeriksa jika sudah lebih dari 1 menit
-            if ($currentTime->diffInMinutes($loginTime) >= 1) {
+            // Periksa apakah waktu terakhir login sudah lebih dari 30 menit yang lalu
+            if ($currentTime->diffInMinutes($lastLoginTime) > 30) {
+                // Lakukan logout user
+                Auth::logout();
 
-
-                // Memperbarui status dan kondisi di model
-                $user = AdministratorUser::find($id);
-                if ($user) {
-                    $user->condition = false;
-                    $user->token = null;
-                    $user->save();
-                }
-
-
-                $message = "[EXPIRED]\n\n$user";
-                $this->telegramService->sendMessage($message);
-
-                // Menghapus sesi
-                session()->flush();
-
-                return redirect('/login')->withErrors(['message' => 'Session expired. Please login again.']);
+                // Redirect ke halaman login atau lakukan tindakan lain
+                return redirect('/login')->with('message', 'Waktu sesi telah habis. Silakan login kembali.');
             }
         }
 

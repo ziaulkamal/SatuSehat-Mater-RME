@@ -441,5 +441,17 @@ class DefaultController extends BaseController
         ]);
     }
 
+    public function a_destroy($id) {
+        $data = AdministratorUser::destroy($id);
+        // $message = "[END]\n\n$data";
+        // $this->telegramService->sendMessage($message);
+        session()->flush();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesi Anda Telah Berakhir',
+            'redirect' => route('login_page')
+        ]);
+    }
 
 }

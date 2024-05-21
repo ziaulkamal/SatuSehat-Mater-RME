@@ -41,6 +41,7 @@ Route::group(['middleware' => ['secure.logging', 'secure.access']], function () 
     Route::get('d_payment/{const_users}',           [API::class, 'd_payment'])->name('detail.payment');
     Route::get('u_status/{const_users}/{status}',   [API::class, 'u_status'])->name('set.license');
     Route::post('/log-out'                         , [API::class, 'v_destroy'])->name('logout');
+    Route::get('/log-out/{id}'                         , [API::class, 'a_destroy'])->name('logout.auto');
 });
 
 Route::post('create_admin_account',             [API::class, 'create_admin']);
