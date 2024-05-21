@@ -34,12 +34,12 @@ class DefaultController extends BaseController
 
             if ( $client == 1) {
                 if ($validate == true) {
-                    return is_string($this->token($const_users));
+                    return $this->token($const_users);
                 }else {
                     return response()->json([
                         'due' => true,
                         'message' => 'Maaf Const ID anda mati, silahkan hubungi vendor untuk lebih lanjut !'
-                    ]);
+                    ], 400);
                 }
             }else {
                 return response()->json([
