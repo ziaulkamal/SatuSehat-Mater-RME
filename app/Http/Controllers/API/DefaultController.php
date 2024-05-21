@@ -34,7 +34,7 @@ class DefaultController extends BaseController
 
             if ( $client == 1) {
                 if ($validate == true) {
-                    return $this->token($const_users);
+                    return is_string($this->token($const_users));
                 }else {
                     return response()->json([
                         'due' => true,
