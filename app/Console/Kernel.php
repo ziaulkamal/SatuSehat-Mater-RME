@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:check-billing-status')->everyMinute();
         $schedule->job(new \App\Jobs\UserStatusCheck)->everyMinute();
+        $schedule->job(new \App\Jobs\CheckLastLoginStatus)->everyMinute();
     }
 
     /**
