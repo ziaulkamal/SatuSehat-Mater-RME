@@ -100,7 +100,7 @@ class AdministratorUser extends Model implements Authenticatable
         return $data;
     }
 
-    public static function reset($email, $newCondition) {
+    public static function reset($email) {
         return self::where('email', $email)
                 ->update(['condition' => false]);
     }
