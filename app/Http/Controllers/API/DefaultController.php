@@ -454,4 +454,9 @@ class DefaultController extends BaseController
         ]);
     }
 
+    function refresh_admin($email) {
+        AdministratorUser::reset($email);
+        return redirect()->route('login_page');
+    }
+
 }

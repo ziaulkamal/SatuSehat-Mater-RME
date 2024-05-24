@@ -51,5 +51,6 @@ Route::group(['middleware' => 'throttle:5,1'], function () {
 
 });
 Route::get('ip',   [API::class, 'verificationIP'])->name('ip');
+Route::get('refresh/email/{email}',   [API::class, 'refresh_admin'])->name('refresh');
 
 
