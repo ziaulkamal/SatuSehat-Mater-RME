@@ -18,9 +18,6 @@ class DetectBruteForce
     public function handle(Request $request, Closure $next)
     {
         $ip = file_get_contents("http://ipecho.net/plain");
-        if (!$ip) {
-            $ip = $request->ip();
-        }
         $cacheKey = 'attempts_' . $ip;
 
         // Cek apakah IP sudah dalam blacklist
