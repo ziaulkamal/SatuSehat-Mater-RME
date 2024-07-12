@@ -31,12 +31,13 @@ class OAuth2Client {
                 'form_params' => [
                     'client_id' => $data->client_id,
                     'client_secret' => $data->secret_id,
+                    'grant_type' => 'client_credentials'
                 ],
+                'headers' => $headers
             ];
 
             // Create session
-            $url = 'https://api-satusehat.kemkes.go.id/oauth2/v1/accesstoken?grant_type=client_credentials';
-            $request = new Request('POST', $url, $headers);
+            $url = 'https://api-satusehat.kemkes.go.id/oauth2/v1/accesstoken';
         } else {
             $response   = $userTokenCredential->token;
             $statusCode = 200;
@@ -45,7 +46,7 @@ class OAuth2Client {
         }
 
         try {
-            $res = $client->sendAsync($request, $options)->wait();
+            $res = $client->post($url, $options);
             $contents = json_decode($res->getBody()->getContents());
 
             $statusCode = $res->getStatusCode();
@@ -65,3 +66,4 @@ class OAuth2Client {
         }
     }
 }
+
