@@ -100,7 +100,7 @@ class DefaultController extends BaseController
     public function v_fasyankes($const_users) {
         $token      = $this->token($const_users);
 
-        if ($token === 'Const ID Tidak Ditemukan') {
+        if ($token == 'Const ID Tidak Ditemukan') {
             return $this->d_fasyankes($const_users, false);
         }
 
