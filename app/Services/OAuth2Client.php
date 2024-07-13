@@ -66,6 +66,7 @@ class OAuth2Client {
         } catch (\Exception $e) {
             $statusCode = 500;
             $response   = 'Const ID Tidak Ditemukan';
+            return $e->getMessage();
             return [ $response, $statusCode ];
         }
 
