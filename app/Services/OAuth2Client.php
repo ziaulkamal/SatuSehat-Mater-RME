@@ -48,7 +48,7 @@ class OAuth2Client {
                 $statusCode = $res->getStatusCode();
                 $response   = $contents->access_token;
 
-
+                dd($response);
                 UserTokenCredential::create([
                     'const_users' => $const_users,
                     'token'       => $response,
@@ -66,7 +66,7 @@ class OAuth2Client {
         } catch (\Exception $e) {
             $statusCode = 500;
             $response   = 'Const ID Tidak Ditemukan';
-            return $e->getMessage();
+
             return [ $response, $statusCode ];
         }
 
