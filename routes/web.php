@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\GatewayClientController;
 use App\Http\Controllers\DefaultController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -21,6 +23,8 @@ Route::group(['middleware' => ['secure.logging', 'secure.access']], function () 
     Route::get('/payment/history/{const_users}'   , [DefaultController::class, 'payment'])->name('payment.history');
 
 });
+
+Route::get('try/token', [GatewayClientController::class, 'test']);
 
 Route::get('/login', function () {
     $data = [
