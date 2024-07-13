@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curl with JavaScript</title>
+</head>
+
+<body>
+    <h1>Fetch API Example</h1>
+    <button id="fetchData">Fetch Data</button>
+    <pre id="response"></pre>
+
+    <script>
+        document.getElementById('fetchData').addEventListener('click', function () {
+            const clientId = '37ISDRZj9EBUf9WPujky7HY2S6gKADpnLKqzuDdf63Vrnphc';
+            const clientSecret = 'QuqhjY8aK6COUnItyAl5EJKdyOTiE5pADg44GCtxtxvrefmdOU5wnd6S2WSYhzt3';
+            const base64Credentials = btoa(`${clientId}:${clientSecret}`);
+
+            fetch('https://api-satusehat.kemkes.go.id/oauth2/v1/accesstoken?grant_type=client_credentials', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': `Basic ${base64Credentials}`
+                    },
+                    body: new URLSearchParams({
+                        'client_id': clientId,
+                        'client_secret': clientSecret
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>
