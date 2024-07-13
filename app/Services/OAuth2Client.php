@@ -48,7 +48,7 @@ class OAuth2Client {
                 $statusCode = $res->getStatusCode();
                 $response   = $contents->access_token;
 
-                dd([ $response, $statusCode ]);
+
                 UserTokenCredential::create([
                     'const_users' => $const_users,
                     'token'       => $response,
